@@ -17,70 +17,70 @@ require('chai').should()
 
 const cliPath = path.resolve(__dirname, './bin/cli.js')
 
-function branch (branch) {
+function branch(branch) {
   shell.exec('git branch ' + branch)
 }
 
-function checkout (branch) {
+function checkout(branch) {
   shell.exec('git checkout ' + branch)
 }
 
-function commit (msg) {
+function commit(msg) {
   shell.exec('git commit --allow-empty -m"' + msg + '"')
 }
 
-function merge (msg, branch) {
+function merge(msg, branch) {
   shell.exec('git merge --no-ff -m"' + msg + '" ' + branch)
 }
 
-function execCli (argString) {
+function execCli(argString) {
   return shell.exec('node ' + cliPath + (argString != null ? ' ' + argString : ''))
 }
 
-function execCliAsync (argString) {
+function execCliAsync(argString) {
   return standardVersion(cli.parse('standard-version ' + argString + ' --silent'))
 }
 
-function writePackageJson (version, option) {
+function writePackageJson(version, option) {
   option = option || {}
-  const pkg = Object.assign(option, { version: version })
+  const pkg = Object.assign(option, {version: version})
   fs.writeFileSync('package.json', JSON.stringify(pkg), 'utf-8')
 }
 
-function writeBowerJson (version, option) {
+function writeBowerJson(version, option) {
   option = option || {}
-  const bower = Object.assign(option, { version: version })
+  const bower = Object.assign(option, {version: version})
   fs.writeFileSync('bower.json', JSON.stringify(bower), 'utf-8')
 }
 
-function writeManifestJson (version, option) {
+function writeManifestJson(version, option) {
   option = option || {}
-  const manifest = Object.assign(option, { version: version })
+  const manifest = Object.assign(option, {version: version})
   fs.writeFileSync('manifest.json', JSON.stringify(manifest), 'utf-8')
 }
 
-function writeNpmShrinkwrapJson (version, option) {
+function writeNpmShrinkwrapJson(version, option) {
   option = option || {}
-  const shrinkwrap = Object.assign(option, { version: version })
+  const shrinkwrap = Object.assign(option, {version: version})
   fs.writeFileSync('npm-shrinkwrap.json', JSON.stringify(shrinkwrap), 'utf-8')
 }
 
-function writePackageLockJson (version, option) {
+function writePackageLockJson(version, option) {
   option = option || {}
-  const pkgLock = Object.assign(option, { version: version })
+  const pkgLock = Object.assign(option, {version: version})
   fs.writeFileSync('package-lock.json', JSON.stringify(pkgLock), 'utf-8')
 }
 
-function writeGitPreCommitHook () {
+function writeGitPreCommitHook() {
   fs.writeFileSync('.git/hooks/pre-commit', '#!/bin/sh\necho "precommit ran"\nexit 1', 'utf-8')
   fs.chmodSync('.git/hooks/pre-commit', '755')
 }
 
-function writePostBumpHook (causeError) {
+function writePostBumpHook(causeError) {
   writeHook('postbump', causeError)
 }
 
-function writeHook (hookName, causeError, script) {
+function writeHook(hookName, causeError, script) {
   shell.mkdir('-p', 'scripts')
   let content = script || 'console.error("' + hookName + ' ran")'
   content += causeError ? '\nthrow new Error("' + hookName + '-failure")' : ''
@@ -88,7 +88,7 @@ function writeHook (hookName, causeError, script) {
   fs.chmodSync('scripts/' + hookName + '.js', '755')
 }
 
-function initInTempFolder () {
+function initInTempFolder() {
   shell.rm('-rf', 'tmp')
   shell.config.silent = true
   shell.mkdir('tmp')
@@ -99,12 +99,12 @@ function initInTempFolder () {
   writePackageJson('1.0.0')
 }
 
-function finishTemp () {
+function finishTemp() {
   shell.cd('../')
   shell.rm('-rf', 'tmp')
 }
 
-function getPackageVersion () {
+function getPackageVersion() {
   return JSON.parse(fs.readFileSync('package.json', 'utf-8')).version
 }
 
@@ -507,7 +507,7 @@ describe('cli', function () {
     })
 
     it('does not advise use of --tag prerelease for private modules', function () {
-      writePackageJson('1.0.0', { private: true })
+      writePackageJson('1.0.0', {private: true})
       fs.writeFileSync('CHANGELOG.md', 'legacy header format<a name="1.0.0">\n', 'utf-8')
 
       commit('feat: first commit')
@@ -735,7 +735,7 @@ describe('cli', function () {
   })
 
   it('does not display `npm publish` if the package is private', function () {
-    writePackageJson('1.0.0', { private: true })
+    writePackageJson('1.0.0', {private: true})
 
     const result = execCli()
     result.code.should.equal(0)
@@ -806,7 +806,7 @@ describe('standard-version', function () {
 
   describe('with mocked conventionalRecommendedBump', function () {
     beforeEach(function () {
-      mockery.enable({ warnOnUnregistered: false, useCleanCache: true })
+      mockery.enable({warnOnUnregistered: false, useCleanCache: true})
       mockery.registerMock('conventional-recommended-bump', function (_, cb) {
         cb(new Error('bump err'))
       })
@@ -822,7 +822,7 @@ describe('standard-version', function () {
       shell.exec('git tag -a v1.0.0 -m "my awesome first release"')
       commit('feat: new feature!')
 
-      require('./index')({ silent: true })
+      require('./index')({silent: true})
         .catch((err) => {
           err.message.should.match(/bump err/)
           done()
@@ -832,9 +832,9 @@ describe('standard-version', function () {
 
   describe('with mocked conventionalChangelog', function () {
     beforeEach(function () {
-      mockery.enable({ warnOnUnregistered: false, useCleanCache: true })
+      mockery.enable({warnOnUnregistered: false, useCleanCache: true})
       mockery.registerMock('conventional-changelog', function () {
-        const readable = new stream.Readable({ objectMode: true })
+        const readable = new stream.Readable({objectMode: true})
         readable._read = function () {
         }
         setImmediate(readable.emit.bind(readable), 'error', new Error('changelog err'))
@@ -852,7 +852,7 @@ describe('standard-version', function () {
       shell.exec('git tag -a v1.0.0 -m "my awesome first release"')
       commit('feat: new feature!')
 
-      require('./index')({ silent: true })
+      require('./index')({silent: true})
         .catch((err) => {
           err.message.should.match(/changelog err/)
           return done()
@@ -865,7 +865,7 @@ describe('standard-version', function () {
     shell.exec('git tag -a v1.0.0 -m "my awesome first release"')
     commit('feat: new feature!')
 
-    require('./index')({ silent: true })
+    require('./index')({silent: true})
       .then(() => {
         // check last commit message
         shell.exec('git log --oneline -n1').stdout.should.match(/chore\(release\): 1\.1\.0/)
@@ -897,7 +897,7 @@ describe('standard-version', function () {
       commit('feat: first commit')
       shell.exec('git tag -a v1.0.0 -m "my awesome first release"')
       commit('feat: new feature!')
-      return require('./index')({ silent: true })
+      return require('./index')({silent: true})
         .then(() => {
           JSON.parse(fs.readFileSync('bower.json', 'utf-8')).version.should.equal('1.1.0')
           getPackageVersion().should.equal('1.1.0')
@@ -914,7 +914,7 @@ describe('standard-version', function () {
       commit('feat: first commit')
       shell.exec('git tag -a v1.0.0 -m "my awesome first release"')
       commit('feat: new feature!')
-      return require('./index')({ silent: true })
+      return require('./index')({silent: true})
         .then(() => {
           JSON.parse(fs.readFileSync('manifest.json', 'utf-8')).version.should.equal('1.1.0')
           getPackageVersion().should.equal('1.1.0')
@@ -1047,7 +1047,7 @@ describe('standard-version', function () {
       commit('feat: first commit')
       shell.exec('git tag -a v1.0.0 -m "my awesome first release"')
       commit('feat: new feature!')
-      require('./index')({ silent: true })
+      require('./index')({silent: true})
         .then(() => {
           JSON.parse(fs.readFileSync('npm-shrinkwrap.json', 'utf-8')).version.should.equal('1.1.0')
           getPackageVersion().should.equal('1.1.0')
@@ -1066,7 +1066,7 @@ describe('standard-version', function () {
       commit('feat: first commit')
       shell.exec('git tag -a v1.0.0 -m "my awesome first release"')
       commit('feat: new feature!')
-      return require('./index')({ silent: true })
+      return require('./index')({silent: true})
         .then(() => {
           JSON.parse(fs.readFileSync('package-lock.json', 'utf-8')).version.should.equal('1.1.0')
           getPackageVersion().should.equal('1.1.0')
@@ -1130,7 +1130,7 @@ describe('standard-version', function () {
       commit('feat: first commit')
       shell.exec('git tag -a v1.0.0 -m "my awesome first release"')
       commit('feat: new feature!')
-      return require('./index')({ silent: true })
+      return require('./index')({silent: true})
         .then(() => {
           JSON.parse(fs.readFileSync('bower.json', 'utf-8')).version.should.equal('1.0.0')
           getPackageVersion().should.equal('1.1.0')
@@ -1149,7 +1149,7 @@ describe('standard-version', function () {
       commit('feat: first commit')
       shell.exec('git tag -a v1.0.0 -m "my awesome first release"')
       commit('feat: new feature!')
-      return require('./index')({ silent: true })
+      return require('./index')({silent: true})
         .then(() => {
           JSON.parse(fs.readFileSync('bower.json', 'utf-8')).version.should.equal('1.0.0')
           getPackageVersion().should.equal('1.1.0')
@@ -1161,7 +1161,7 @@ describe('standard-version', function () {
     it('defaults to 1.0.0 if no tags in git history', () => {
       shell.rm('package.json')
       commit('feat: first commit')
-      return require('./index')({ silent: true })
+      return require('./index')({silent: true})
         .then(() => {
           const output = shell.exec('git tag')
           output.stdout.should.include('v1.1.0')
@@ -1173,7 +1173,7 @@ describe('standard-version', function () {
       shell.exec('git tag -a v5.0.0 -m "a release"')
       shell.exec('git tag -a v3.0.0 -m "another release"')
       commit('feat: another commit')
-      return require('./index')({ silent: true })
+      return require('./index')({silent: true})
         .then(() => {
           const output = shell.exec('git tag')
           output.stdout.should.include('v5.1.0')

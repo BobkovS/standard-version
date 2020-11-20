@@ -6,9 +6,9 @@ const latestSemverTag = require('./lib/latest-semver-tag')
 const path = require('path')
 const printError = require('./lib/print-error')
 const tag = require('./lib/lifecycles/tag')
-const { resolveUpdaterObjectFromArgument } = require('./lib/updaters')
+const {resolveUpdaterObjectFromArgument} = require('./lib/updaters')
 
-module.exports = function standardVersion (argv) {
+module.exports = function standardVersion(argv) {
   const defaults = require('./defaults')
   /**
    * `--message` (`-m`) support will be removed in the next major version.
@@ -49,7 +49,8 @@ module.exports = function standardVersion (argv) {
         version: updater.updater.readVersion(contents),
         private: typeof updater.updater.isPrivate === 'function' ? updater.updater.isPrivate(contents) : false
       }
-    } catch (err) {}
+    } catch (err) {
+    }
   })
   let newVersion
   return Promise.resolve()

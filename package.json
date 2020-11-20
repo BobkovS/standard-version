@@ -1,5 +1,5 @@
 {
-  "name": "@dwmkerr/standard-version",
+  "name": "@greendata/standard-version",
   "version": "8.3.0",
   "description": "replacement for `npm version` with automatic CHANGELOG generation",
   "bin": "bin/cli.js",
