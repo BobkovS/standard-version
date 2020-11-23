@@ -1,6 +1,6 @@
 {
-  "name": "@greendata/standard-version",
-  "version": "8.3.0",
+  "name": "changelog-standard-version",
+  "version": "1.0.0",
   "description": "replacement for `npm version` with automatic CHANGELOG generation",
   "bin": "bin/cli.js",
   "scripts": {
@@ -14,7 +14,7 @@
       "tmp/**"
     ]
   },
-  "repository": "conventional-changelog/standard-version",
+  "repository": "https://gitlab.greendatasoft.ru/greendata/standard-version",
   "engines": {
     "node": ">=8.0"
   },
@@ -30,10 +30,7 @@
   ],
   "author": "Ben Coe <ben@npmjs.com>",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/conventional-changelog/standard-version/issues"
-  },
-  "homepage": "https://github.com/conventional-changelog/standard-version#readme",
+  "homepage": "https://gitlab.greendatasoft.ru/greendata/standard-version",
   "dependencies": {
     "chalk": "2.4.2",
     "conventional-changelog": "3.1.18",
