@@ -1,6 +1,6 @@
 {
   "name": "greendata-release-tool",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Automatic changelog generation and release tool",
   "bin": "bin/cli.js",
   "scripts": {
